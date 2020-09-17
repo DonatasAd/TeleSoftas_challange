@@ -29,11 +29,16 @@ class DecoratedItem extends ItemDecorator {
     const isSulfuras = this.item.name === 'Sulfuras, Hand of Ragnaros';
     const isAgedBrie = this.item.name === 'Aged Brie';
     const isBackstagePass = this.item.name === 'Backstage passes to a TAFKAL80ETC concert';
-    if(isSulfuras) return this.item.quality;
+    const isConjured = this.item.name === 'Conjured';
+    if (isSulfuras) return this.item.quality;
     if (isAgedBrie) return this.incrementQuality();
     if (isBackstagePass) {
       const BackstagePassQualityDiff = this.calcQualityDiffBackstagePass();
       return (this.item.quality = this.item.quality + BackstagePassQualityDiff);
+    }
+    if (isConjured) {
+      const normalItemQualityDiff = this.calcQualityDiffNormalItem();
+      return (this.item.quality = this.item.quality - normalItemQualityDiff * 2);
     }
     const normalItemQualityDiff = this.calcQualityDiffNormalItem();
     return (this.item.quality = this.item.quality - normalItemQualityDiff);
@@ -71,13 +76,6 @@ class DecoratedItem extends ItemDecorator {
     if (noMoreDaysToSell) return 0;
     return this.item.sellIn--;
   };
-
-  isItemNormal = () => {
-    const isAgedBrie = this.item.name === 'Aged Brie';
-    const isBackstagePass = this.item.name === 'Backstage passes to a TAFKAL80ETC concert';
-    const isSulfuras = this.item.name === 'Sulfuras, Hand of Ragnaros';
-    return !isAgedBrie && !isBackstagePass && !isSulfuras;
-  };
 }
 
 class Shop {
@@ -92,6 +90,7 @@ class Shop {
     return this.items;
   }
 }
+
 module.exports = {
   Item,
   Shop,
