@@ -23,24 +23,24 @@ class Shop {
       const tenDaysOrLessToSell = item.sellIn <= 10;
       const fiveDaysOrLessToSell = item.sellIn <= 5;
       if (!isSulfuras) {
-        item.sellIn = item.sellIn - 1;
+        item.sellIn--;
       }
       const noMoreDaysToSell = item.sellIn < 0;
       const isItemNormal = !isAgedBrie && !isBackstagePass && !isSulfuras;
 
       if (isItemNormal) {
         if (isQualityPositive) {
-          item.quality = item.quality - 1;
+          item.quality--;
         }
       } else if (isQualityLessThan50) {
-        item.quality = item.quality + 1;
+        item.quality++;
         if (isBackstagePass) {
           if (tenDaysOrLessToSell) {
-            item.quality = item.quality + 1;
+            item.quality++;
           }
 
           if (fiveDaysOrLessToSell) {
-            item.quality = item.quality + 1;
+            item.quality++;
           }
         }
       }
@@ -49,13 +49,13 @@ class Shop {
         if (!isAgedBrie) {
           if (!isBackstagePass) {
             if (isQualityPositive && !isSulfuras) {
-              item.quality = item.quality - 1;
+              item.quality--;
             }
           } else {
-            item.quality = item.quality - item.quality;
+            item.quality = 0;
           }
         } else if (isQualityLessThan50) {
-          item.quality = item.quality + 1;
+          item.quality++;
         }
       }
     }
