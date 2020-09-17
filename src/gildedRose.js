@@ -19,7 +19,14 @@ class Shop {
       // Booleans to check quality
       const isQualityPositive = item.quality > 0;
       const isQualityLessThan50 = item.quality < 50;
-
+      // Booleans to check sellIn
+      const tenDaysOrLessToSell = item.sellIn <= 10;
+      const fiveDaysOrLessToSell = item.sellIn <= 5;
+      if (!isSulfuras) {
+        item.sellIn = item.sellIn - 1;
+      }
+      const noMoreDaysToSell = item.sellIn < 0;
+      
       if (!isAgedBrie && !isBackstagePass) {
         if (isQualityPositive) {
           if (!isSulfuras) {
@@ -30,12 +37,12 @@ class Shop {
         if (isQualityLessThan50) {
           item.quality = item.quality + 1;
           if (isBackstagePass) {
-            if (item.sellIn < 11) {
+            if (tenDaysOrLessToSell) {
               if (isQualityLessThan50) {
                 item.quality = item.quality + 1;
               }
             }
-            if (item.sellIn < 6) {
+            if (fiveDaysOrLessToSell) {
               if (isQualityLessThan50) {
                 item.quality = item.quality + 1;
               }
@@ -43,10 +50,8 @@ class Shop {
           }
         }
       }
-      if (!isSulfuras) {
-        item.sellIn = item.sellIn - 1;
-      }
-      if (item.sellIn < 0) {
+
+      if (noMoreDaysToSell) {
         if (!isAgedBrie) {
           if (!isBackstagePass) {
             if (isQualityPositive) {
