@@ -86,4 +86,17 @@ describe('spec/giledRose.spec.js', () => {
     const quality = items[0].getItemQuality();
     expect(quality).toEqual(0);
   });
+  // Requirement - "Conjured" items degrade in Quality twice as fast as normal items
+  it('Should drop "Conjured" quality by 2', () => {
+    const gildedRose = new Shop([new DecoratedItem(new Item('Conjured', 1, 2))]);
+    const items = gildedRose.updateQuality();
+    const quality = items[0].getItemQuality();
+    expect(quality).toEqual(0);
+  });
+  it('Should drop "Conjured" quality by 4', () => {
+    const gildedRose = new Shop([new DecoratedItem(new Item('Conjured', 0, 4))]);
+    const items = gildedRose.updateQuality();
+    const quality = items[0].getItemQuality();
+    expect(quality).toEqual(0);
+  });
 });
