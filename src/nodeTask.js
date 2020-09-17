@@ -1,6 +1,8 @@
 const fs = require('fs');
 const readline = require('readline');
 const { Item, DecoratedItem } = require('../src/gildedRose');
+
+// Paths to files
 const GENERATED_INPUT = './generatedInput.txt';
 const AGED_BRIE_OUTPUT = './output/AgedBrie.txt';
 const SULFURAS_OUTPUT = './output/Sulfuras.txt';
@@ -8,12 +10,29 @@ const FOO_OUTPUT = './output/Foo.txt';
 const BACKSTAGE_PASS_OUTPUT = './output/BackstagePass.txt';
 const CONJURED_OUTPUT = './output/Conjured.txt';
 
+// Read and write streams
+const fileStream = fs.createReadStream(GENERATED_INPUT);
+const writableAgedBrieStream = fs.createWriteStream(AGED_BRIE_OUTPUT);
+const writableSulfurasStream = fs.createWriteStream(SULFURAS_OUTPUT);
+const writableFooStream = fs.createWriteStream(FOO_OUTPUT);
+const writableBackstagePassStream = fs.createWriteStream(BACKSTAGE_PASS_OUTPUT);
+const writableConjuredStream = fs.createWriteStream(CONJURED_OUTPUT);
+
+// Error handling on streams
+const handleError = (err) => console.error(err);
+fileStream.on('error', handleError);
+writableAgedBrieStream.on('error', handleError);
+writableSulfurasStream.on('error', handleError);
+writableFooStream.on('error', handleError);
+writableBackstagePassStream.on('error', handleError);
+writableConjuredStream.on('error', handleError);
+
 function extractDataFromString(line) {
   // Extract data string line
   const dataFromLine = line.split('#');
   const name = dataFromLine[0].trim();
-  const sellIn = Number(dataFromLine[1].trim());
-  const quality = Number(dataFromLine[2].trim());
+  const sellIn = parseInt(dataFromLine[1].trim());
+  const quality = parseInt(dataFromLine[2].trim());
   // Update Item
   const decoratedItem = new DecoratedItem(new Item(name, sellIn, quality));
   return decoratedItem;
@@ -28,21 +47,14 @@ function updateLine(decoratedItem) {
   return updatedLine;
 }
 
-function processGiledRoseFile(inputFilePath) {
-  return new Promise(function (resolve, reject) {
-    const fileStream = fs.createReadStream(inputFilePath);
-    const writableAgedBrieStream = fs.createWriteStream(AGED_BRIE_OUTPUT);
-    const writableSulfurasStream = fs.createWriteStream(SULFURAS_OUTPUT);
-    const writableFooStream = fs.createWriteStream(FOO_OUTPUT);
-    const writableBackstagePassStream = fs.createWriteStream(BACKSTAGE_PASS_OUTPUT);
-    const writableConjuredStream = fs.createWriteStream(CONJURED_OUTPUT);
+function processGiledRoseFile() {
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  });
 
-    const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity,
-    });
-
-    rl.on('line', (line) => {
+  rl.on('line', (line) => {
+    try {
       const decoratedItem = extractDataFromString(line);
       const updatedLine = updateLine(decoratedItem);
       const name = decoratedItem.getItemName();
@@ -67,19 +79,14 @@ function processGiledRoseFile(inputFilePath) {
           console.log('Unknown item name found!');
           return;
       }
-    });
-    rl.on('close', () => {
-      resolve();
-      // End all writable streams
-      writableSulfurasStream.end();
-      writableFooStream.end();
-      writableAgedBrieStream.end();
-      writableBackstagePassStream.end();
-      writableConjuredStream.end();
-    });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  rl.on('close', () => {
+    console.log('File processing is done!');
   });
 }
 
-processGiledRoseFile(GENERATED_INPUT)
-  .then(() => console.log('Job done'))
-  .catch((err) => console.log(err));
+processGiledRoseFile();
