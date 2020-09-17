@@ -26,27 +26,21 @@ class Shop {
         item.sellIn = item.sellIn - 1;
       }
       const noMoreDaysToSell = item.sellIn < 0;
-      
-      if (!isAgedBrie && !isBackstagePass) {
+      const isItemNormal = !isAgedBrie && !isBackstagePass && !isSulfuras;
+
+      if (isItemNormal) {
         if (isQualityPositive) {
-          if (!isSulfuras) {
-            item.quality = item.quality - 1;
-          }
+          item.quality = item.quality - 1;
         }
-      } else {
-        if (isQualityLessThan50) {
-          item.quality = item.quality + 1;
-          if (isBackstagePass) {
-            if (tenDaysOrLessToSell) {
-              if (isQualityLessThan50) {
-                item.quality = item.quality + 1;
-              }
-            }
-            if (fiveDaysOrLessToSell) {
-              if (isQualityLessThan50) {
-                item.quality = item.quality + 1;
-              }
-            }
+      } else if (isQualityLessThan50) {
+        item.quality = item.quality + 1;
+        if (isBackstagePass) {
+          if (tenDaysOrLessToSell) {
+            item.quality = item.quality + 1;
+          }
+
+          if (fiveDaysOrLessToSell) {
+            item.quality = item.quality + 1;
           }
         }
       }
@@ -54,18 +48,14 @@ class Shop {
       if (noMoreDaysToSell) {
         if (!isAgedBrie) {
           if (!isBackstagePass) {
-            if (isQualityPositive) {
-              if (!isSulfuras) {
-                item.quality = item.quality - 1;
-              }
+            if (isQualityPositive && !isSulfuras) {
+              item.quality = item.quality - 1;
             }
           } else {
             item.quality = item.quality - item.quality;
           }
-        } else {
-          if (isQualityLessThan50) {
-            item.quality = item.quality + 1;
-          }
+        } else if (isQualityLessThan50) {
+          item.quality = item.quality + 1;
         }
       }
     }
