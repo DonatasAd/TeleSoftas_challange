@@ -68,7 +68,15 @@ function processGiledRoseFile(inputFilePath) {
           return;
       }
     });
-    rl.on('close', () => resolve());
+    rl.on('close', () => {
+      resolve();
+      // End all writable streams
+      writableSulfurasStream.end();
+      writableFooStream.end();
+      writableAgedBrieStream.end();
+      writableBackstagePassStream.end();
+      writableConjuredStream.end();
+    });
   });
 }
 
