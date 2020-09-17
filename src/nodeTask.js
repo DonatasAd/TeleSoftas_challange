@@ -47,6 +47,30 @@ function updateLine(decoratedItem) {
   return updatedLine;
 }
 
+function writeToFile(itemName, updatedLine) {
+  // Write to file based on Item name
+  switch (itemName) {
+    case 'Sulfuras, Hand of Ragnaros':
+      writableSulfurasStream.write(updatedLine);
+      break;
+    case 'foo':
+      writableFooStream.write(updatedLine);
+      break;
+    case 'Aged Brie':
+      writableAgedBrieStream.write(updatedLine);
+      break;
+    case 'Backstage passes to a TAFKAL80ETC concert':
+      writableBackstagePassStream.write(updatedLine);
+      break;
+    case 'Conjured':
+      writableConjuredStream.write(updatedLine);
+      break;
+    default:
+      console.log('Unknown item name found!');
+      return;
+  }
+}
+
 function processGiledRoseFile() {
   const rl = readline.createInterface({
     input: fileStream,
@@ -58,27 +82,7 @@ function processGiledRoseFile() {
       const decoratedItem = extractDataFromString(line);
       const updatedLine = updateLine(decoratedItem);
       const name = decoratedItem.getItemName();
-      // Write to file based on Item name
-      switch (name) {
-        case 'Sulfuras, Hand of Ragnaros':
-          writableSulfurasStream.write(updatedLine);
-          break;
-        case 'foo':
-          writableFooStream.write(updatedLine);
-          break;
-        case 'Aged Brie':
-          writableAgedBrieStream.write(updatedLine);
-          break;
-        case 'Backstage passes to a TAFKAL80ETC concert':
-          writableBackstagePassStream.write(updatedLine);
-          break;
-        case 'Conjured':
-          writableConjuredStream.write(updatedLine);
-          break;
-        default:
-          console.log('Unknown item name found!');
-          return;
-      }
+      writeToFile(name, updatedLine);
     } catch (error) {
       console.error(error);
     }
