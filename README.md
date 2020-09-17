@@ -23,10 +23,14 @@ pseudo code, diagrams or comments.
 
 Additional requirements for kata:
 
-● Application type – console application or a class covered with tests .
-● Algorithm correctness must be ensured by covering it with automated unit tests .
-● Source code should be provided in public repository ( github.com , bitbucket.org ,
-etc.)
+● Application type – console application or a class covered with tests.
+
+● Algorithm correctness must be ensured by covering it with automated unit tests.
+
+● Source code should be provided in public repository ( github.com, bitbucket.org, etc.)
+
 ● Try committing early and often.
+
 ● Comment shortcuts you take when you have an idea for better implementation.
+
 ● Don't hesitate to use new language features where it makes sense.
