@@ -26,13 +26,36 @@ class DecoratedItem extends ItemDecorator {
   };
 
   decrementQuality = () => {
-    const noMoreDaysToSell = this.item.sellIn <= 0;
-    const noMoreQuality = this.item.quality === 0;
+    const isSulfuras = this.item.name === 'Sulfuras, Hand of Ragnaros';
     const isAgedBrie = this.item.name === 'Aged Brie';
-    if()
-    if (noMoreDaysToSell) return (this.item.quality = this.item.quality - 2);
-    if (noMoreQuality) return 0;
-    return this.item.quality--;
+    const isBackstagePass = this.item.name === 'Backstage passes to a TAFKAL80ETC concert';
+    if(isSulfuras) return this.item.quality;
+    if (isAgedBrie) return this.incrementQuality();
+    if (isBackstagePass) {
+      const BackstagePassQualityDiff = this.calcQualityDiffBackstagePass();
+      return (this.item.quality = this.item.quality + BackstagePassQualityDiff);
+    }
+    const normalItemQualityDiff = this.calcQualityDiffNormalItem();
+    return (this.item.quality = this.item.quality - normalItemQualityDiff);
+  };
+
+  calcQualityDiffNormalItem = () => {
+    const noMoreDaysToSell = this.item.sellIn === 0;
+    const isQualityBiggerThan0 = this.item.quality > 0;
+    const isQualityMoreThan2 = this.item.quality >= 2;
+    if (noMoreDaysToSell && isQualityMoreThan2) return 2;
+    if (isQualityBiggerThan0) return 1;
+    return 0;
+  };
+
+  calcQualityDiffBackstagePass = () => {
+    const tenDaysOrLessToSell = this.item.sellIn <= 10;
+    const fiveDaysOrLessToSell = this.item.sellIn <= 5;
+    const areNoMoreDaysToSell = this.item.sellIn <= 0;
+    if (areNoMoreDaysToSell) return -this.item.quality;
+    if (fiveDaysOrLessToSell) return +3;
+    if (tenDaysOrLessToSell) return +2;
+    return +1;
   };
 
   incrementQuality = () => {
@@ -63,65 +86,8 @@ class Shop {
   }
   updateQuality() {
     for (const item of this.items) {
-      // Booleans to check what item it is
-      const isAgedBrie = item.name === 'Aged Brie';
-      const isBackstagePass = item.name === 'Backstage passes to a TAFKAL80ETC concert';
-      const isSulfuras = item.name === 'Sulfuras, Hand of Ragnaros';
-      // Booleans to check quality
-      const isQualityPositive = item.quality > 0;
-      const isQualityLessThan50 = item.quality < 50;
-      // Booleans to check sellIn
-      const tenDaysOrLessToSell = item.sellIn <= 10;
-      const fiveDaysOrLessToSell = item.sellIn <= 5;
-
-      // if (isAgedBrie) return this.incrementQuality();
-      // if (isBackstagePass) return this.incrementQuality();
-    
-      const isAgedBrie = this.item.name === 'Aged Brie';
-      const isSulfuras = this.item.name === 'Sulfuras, Hand of Ragnaros';
-      const isBackstagePass = this.item.name === 'Backstage passes to a TAFKAL80ETC concert';
-      const isItemNormal = item.isItemNormal();
-      
-        item.decrementQuality();
-        item.decrementSellIn();
-     
-
-      //   if (!isSulfuras) {
-      //     item.sellIn--;
-      //   }
-      //   const noMoreDaysToSell = item.sellIn < 0;
-      //   const isItemNormal = !isAgedBrie && !isBackstagePass && !isSulfuras;
-
-      //   if (isItemNormal) {
-      //     if (isQualityPositive) {
-      //       item.quality--;
-      //     }
-      //   } else if (isQualityLessThan50) {
-      //     item.quality++;
-      //     if (isBackstagePass) {
-      //       if (tenDaysOrLessToSell) {
-      //         item.quality++;
-      //       }
-
-      //       if (fiveDaysOrLessToSell) {
-      //         item.quality++;
-      //       }
-      //     }
-      //   }
-
-      //   if (noMoreDaysToSell) {
-      //     if (!isAgedBrie) {
-      //       if (!isBackstagePass) {
-      //         if (isQualityPositive && !isSulfuras) {
-      //           item.quality--;
-      //         }
-      //       } else {
-      //         item.quality = 0;
-      //       }
-      //     } else if (isQualityLessThan50) {
-      //       item.quality++;
-      //     }
-      //   }
+      item.decrementQuality();
+      item.decrementSellIn();
     }
     return this.items;
   }
