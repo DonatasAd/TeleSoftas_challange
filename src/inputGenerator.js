@@ -1,10 +1,10 @@
 const fs = require('fs');
 const { Readable } = require('stream');
 const OUTPUT_DESTINATION = './generatedInput.txt';
-const ITEM_NAMES = ['Backstage passes to a TAFKAL80ETC concert', 'Aged Brie', 'Sulfuras, Hand of Ragnaros', 'foo'];
+const ITEM_NAMES = ['Backstage passes to a TAFKAL80ETC concert', 'Aged Brie', 'Sulfuras, Hand of Ragnaros', 'foo', 'Conjured'];
 const QUALITY_INTERVAL = [0, 50];
 const SELLINS_INTERVAL = [-1, 10];
-const MAX_ITEM_COUNT = 10;
+const MAX_ITEM_COUNT = 1000000;
 
 class InputGenerator extends Readable {
   constructor(options) {
