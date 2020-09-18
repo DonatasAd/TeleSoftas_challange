@@ -18,22 +18,12 @@ const writableFooStream = fs.createWriteStream(FOO_OUTPUT);
 const writableBackstagePassStream = fs.createWriteStream(BACKSTAGE_PASS_OUTPUT);
 const writableConjuredStream = fs.createWriteStream(CONJURED_OUTPUT);
 
-// Error handling on streams
-const handleError = (err) => console.error(err);
-fileStream.on('error', handleError);
-writableAgedBrieStream.on('error', handleError);
-writableSulfurasStream.on('error', handleError);
-writableFooStream.on('error', handleError);
-writableBackstagePassStream.on('error', handleError);
-writableConjuredStream.on('error', handleError);
-
 function extractDataFromString(line) {
   // Extract data string line
   const dataFromLine = line.split('#');
   const name = dataFromLine[0].trim();
   const sellIn = parseInt(dataFromLine[1].trim());
   const quality = parseInt(dataFromLine[2].trim());
-  // Update Item
   const decoratedItem = new DecoratedItem(new Item(name, sellIn, quality));
   return decoratedItem;
 }
